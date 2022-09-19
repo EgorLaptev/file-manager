@@ -1,6 +1,6 @@
 <template>
     <section class="explorer" @dragover="onUpload"  @dragend="offUpload" @dragleave="offUpload" @contextmenu="">
-        <input type="file" @change="uploadFile" class="fileInput" :class="{'fileInput_active': uploadAvailable}" v-show="uploadAvailable">
+        <input type="file" @change.prevent="uploadFile" class="fileInput" :class="{'fileInput_active': uploadAvailable}" v-show="uploadAvailable">
         <div class="explorer__container container">
             <input class="explorer__breadcrumbs" v-model="path" @change="readDir">
             <section class="explorer__grid">
@@ -44,20 +44,11 @@ export default {
             this.files = await ExplorerModel.readDir(this.path);
         },
         uploadFile(e) {
-            BaseModel.fetchData('upload', 'POST', { path: 'C:/openserver/domains/file-manager', upload: e.target.files[0] })
-                .then(resp => console.log(resp))
+            const data = new FormData()
+            data.append('upload', e.target.files[0]);
+            ExplorerModel.upload(this.path, data)
             this.uploadAvailable = false;
         },
-        openContextMenu(e) {
-            this.contextMenu.isFile = e.target.className.startsWith('item')
-            this.contextMenu.show = true;
-            this.contextMenu.x = e.clientX;
-            this.contextMenu.y = e.clientY;
-            this.contextMenu.file.path = e.currentTarget.dataset.path ?? this.path
-            this.contextMenu.file.name = e.currentTarget.dataset.name ?? this.contextMenu.file.name
-            console.log(this.contextMenu.file.name);
-        },
-        closeContextMenu() { this.contextMenu.show = false },
         onUpload() { this.uploadAvailable = true },
         offUpload() { this.uploadAvailable = false }
     }
@@ -105,7 +96,8 @@ export default {
     font-size: 16px;
     width: 100%;
     border: none;
-    outline: none
+    outline: none;
+    color: #858585;
 }
 
 .explorer__grid {

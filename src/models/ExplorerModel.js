@@ -22,7 +22,7 @@ export default class ExplorerModel {
         BaseModel.fetchData('archive', 'POST', { path, compressTo })
     }
     static unarchive(path, extTo) {
-        BaseModel.fetchData('archive', 'POST', { path, extTo })
+        BaseModel.fetchData('unarchive', 'POST', { path, extTo })
     }
     static upload(path, upload) {
         BaseModel.fetchData('upload', 'POST', { path, upload })
