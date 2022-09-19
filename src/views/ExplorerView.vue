@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             uploadAvailable: false,
-            path: 'C:/openserver/domains/file-manager',
+            path: '/home',
             files: [],
             contextMenu: {
                 isFile: false,
@@ -34,7 +34,7 @@ export default {
     },
     name: "ExplorerView",
     components: {ContextMenu, FileItem},
-    mounted() {
+    created() {
         this.readDir()
     },
     methods: {
